@@ -1,0 +1,26 @@
+# ========================
+# .gitignore - GundamStore
+# ========================
+
+# ASP.NET Core build output
+backend/GundamStoreApi/bin/
+backend/GundamStoreApi/obj/
+temp-hash-gen/bin/
+temp-hash-gen/obj/
+
+# User secrets & sensitive config
+backend/GundamStoreApi/appsettings.Development.json
+
+# Uploaded product images (không cần commit ảnh upload)
+backend/GundamStoreApi/wwwroot/images/products/
+
+# VS Code (tuỳ chọn - giữ lại settings chung)
+.vscode/*
+!.vscode/settings.json
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log

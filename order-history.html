@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng của tôi - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .order-history-section { padding: 40px 0; min-height: 80vh; background-color: #f9f9f9; }
+        .order-card { background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; overflow: hidden; border: 1px solid #eee; }
+        .order-card-header { background: #fdfdfd; padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .order-id { font-weight: bold; color: #1a73e8; font-size: 16px; }
+        .order-date { color: #888; font-size: 14px; }
+        .shipping-info { padding: 15px 20px; background: #fffcf5; border-bottom: 1px dashed #ddd; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13.5px; color: #555; }
+        .info-item i { width: 20px; color: #888; }
+        .order-card-body { padding: 10px 20px; }
+        .order-item { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f5f5f5; }
+        .order-item:last-child { border-bottom: none; }
+        .item-img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+        .item-info { flex: 1; }
+        .item-name { font-weight: 600; color: #333; margin-bottom: 5px; font-size: 15px; }
+        .item-meta { color: #666; font-size: 13px; }
+        .order-card-footer { padding: 15px 20px; background: #fdfdfd; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .total-price { color: #d32f2f; font-weight: bold; font-size: 18px; }
+        .status-badge { padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; background: #e3f2fd; color: #1976d2; }
+        .no-order { text-align: center; padding: 80px; color: #888; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="logo" style="text-decoration: none; font-weight: bold; font-size: 24px;">NAWHOBBY</a>
+        </div>
+    </header>
+
+    <section class="container order-history-section">
+        <h2 class="section-title"><i class="fas fa-history"></i> Đơn hàng của tôi</h2>
+        <div id="orderListContent">
+            <div class="no-order"><i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...</div>
+        </div>
+    </section>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            fetchUserOrders();
+        });
+
+        function formatOrderPrice(price) {
+            const actualPrice = parseFloat(price);
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(actualPrice);
+        }
+
+        async function fetchUserOrders() {
+            const container = document.getElementById('orderListContent');
+            const token = localStorage.getItem('jwtToken'); 
+            try {
+                const response = await fetch('http://localhost:5134/api/orders/my-orders', {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error("API Error");
+                const orders = await response.json();
+                
+                if (orders.length === 0) {
+                    container.innerHTML = '<div class="no-order"><p>Bạn chưa có đơn hàng nào.</p></div>';
+                    return;
+                }
+
+                container.innerHTML = orders.map(order => `
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <span class="order-id">Đơn hàng #${order.id}</span>
+                            <span class="order-date">${new Date(order.orderDate).toLocaleDateString('vi-VN')}</span>
+                        </div>
+                        <div class="shipping-info">
+                            <div class="info-item"><i class="fas fa-user"></i> Người nhận: <strong>${order.recipientName}</strong></div>
+                            <div class="info-item"><i class="fas fa-phone"></i> SĐT: <strong>${order.recipientPhone}</strong></div>
+                            <div class="info-item" style="grid-column: span 2;"><i class="fas fa-map-marker-alt"></i> Địa chỉ: <strong>${order.shippingAddress}</strong></div>
+                        </div>
+                        <div class="order-card-body">
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <img src="${item.productImage}" alt="${item.productName}" class="item-img" onerror="this.src='https://placehold.co/200x200?text=Gunpla'">
+                                    <div class="item-info">
+                                        <div class="item-name">${item.productName}</div>
+                                        <div class="item-meta">Số lượng: ${item.quantity} | Đơn giá: ${formatOrderPrice(item.price)}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="order-card-footer">
+                            <div class="order-total">Thanh toán: <span class="total-price">${formatOrderPrice(order.totalAmount)}</span></div>
+                            <span class="status-badge">${order.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = '<div class="no-order" style="color: red;">❌ Lỗi kết nối Backend C#!</div>';
+            }
+        }
+    </script>
+</body>
+</html>

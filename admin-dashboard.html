@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NAWHOBBY</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        /* Dashboard Specific Styles */
+        * { box-sizing: border-box; }
+        
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f5f5f5; 
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #ffd700;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: #ffd700;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+        }
+        
+        .dashboard-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dashboard-header h1 {
+            color: #1e40af;
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            color: #1e40af;
+            margin-bottom: 25px;
+            font-size: 24px;
+            border-bottom: 3px solid #1e40af;
+            padding-bottom: 10px;
+        }
+        
+        .admin-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+        }
+
+        /* Inventory & Orders Table Styles */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .admin-table th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+            color: #1e40af;
+            white-space: nowrap;
+        }
+
+        .admin-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        .stats-card { display: flex; align-items: center; gap: 10px; }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .mobile-menu-btn { display: block; }
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <nav class="sidebar" id="sidebar">
+            <h2><i class="fas fa-rocket"></i> NAWHOBBY</h2>
+            <ul>
+                <li><a onclick="showSection('products')" class="nav-link active"><i class="fas fa-box"></i> Quản lý Sản phẩm</a></li>
+                <li><a onclick="showSection('inventory')" class="nav-link"><i class="fas fa-boxes-stacked"></i> Kho hàng (Inventory)</a></li>
+                <li><a onclick="showSection('orders')" class="nav-link"><i class="fas fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> Trang chủ</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1 id="pageTitle">Quản lý Sản phẩm</h1>
+                <div class="user-info">
+                    <span>Xin chào, <strong id="userName">Admin</strong></span>
+                    <button class="logout-btn" onclick="logout()" style="background:#ef4444; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </button>
+                </div>
+            </header>
+
+            <section id="products" class="content-section active">
+                <div class="action-row" style="display:flex; justify-content: space-between; align-items:center; margin-bottom:25px;">
+                    <h2 class="section-title" style="margin:0; border:none;"><i class="fas fa-plus-circle"></i> THÊM SẢN PHẨM</h2>
+                    <button onclick="resetProductForm()" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">
+                        <i class="fas fa-rotate-left"></i> Làm mới Form
+                    </button>
+                </div>
+
+                <form class="admin-form" id="productForm">
+                    <input type="hidden" id="editProductId">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                        <div class="form-group">
+                            <label>Tên sản phẩm *</label>
+                            <input type="text" id="productName" required placeholder="VD: HG Rising Freedom">
+                        </div>
+                        <div class="form-group">
+                            <label>Grade (Phân loại) *</label>
+                            <select id="productGrade" required>
+                                <option value="HG">HG (High Grade)</option>
+                                <option value="RG">RG (Real Grade)</option>
+                                <option value="MG">MG (Master Grade)</option>
+                                <option value="PG">PG (Perfect Grade)</option>
+                                <option value="MB">MB (Metal Build)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                        <div class="form-group">
+                            <label>Số lượng kho *</label>
+                            <input type="number" id="productStock" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Giá bán (VND) *</label>
+                            <input type="number" id="productPrice" min="0" required placeholder="VD: 550000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả chi tiết</label>
+                        <textarea id="productDesc" rows="3" placeholder="Nhập mô tả sản phẩm..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Ảnh sản phẩm</label>
+                        <input type="file" id="productImage" accept="image/*">
+                        <img id="productImagePreview" style="max-width:180px; display:none; margin-top:15px; border-radius:8px; border: 1px solid #ddd;">
+                    </div>
+                    <button type="submit" class="btn-submit" id="productSubmitBtn">
+                        <i class="fas fa-cloud-arrow-up"></i> LƯU VÀO DATABASE
+                    </button>
+                </form>
+            </section>
+
+            <section id="inventory" class="content-section">
+                <h2 class="section-title"><i class="fas fa-warehouse"></i> CHI TIẾT KHO HÀNG</h2>
+                
+                <div id="outOfStockStats" class="stats-card" style="background:#fffbeb; padding:15px; border-radius:8px; margin-bottom:20px; border-left:4px solid #f59e0b; display:none;">
+                    <i class="fas fa-triangle-exclamation" style="color:#f59e0b;"></i>
+                    <span>Có <strong id="outOfStockCount" style="color:#d97706;">0</strong> sản phẩm đã hết hàng trong kho.</span>
+                </div>
+                
+                <div style="overflow-x:auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width:80px;">Ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th style="width:100px;">Grade</th>
+                                <th style="width:120px;">Số lượng</th>
+                                <th style="width:180px; text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryBody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="orders" class="content-section">
+                <h2 class="section-title"><i class="fas fa-shopping-bag"></i> QUẢN LÝ ĐƠN HÀNG</h2>
+                
+                <div style="overflow-x:auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width:80px;">Mã ĐH</th>
+                                <th>Khách hàng</th>
+                                <th style="width:120px;">Tổng tiền</th>
+                                <th style="width:120px;">Thanh toán</th>
+                                <th style="width:150px;">Ngày đặt</th>
+                                <th style="width:150px;">Trạng thái</th>
+                                <th style="width:120px; text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/inventory.js"></script>
+    <script src="assets/js/orders.js"></script> <script>
+        // KIỂM TRA QUYỀN TRUY CẬP
+        if (typeof isAdmin === 'function' && !isAdmin()) {
+            window.location.href = 'index.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hiển thị tên Admin
+            const userName = localStorage.getItem('userName') || 'Admin';
+            const userDisplay = document.getElementById('userName');
+            if (userDisplay) userDisplay.textContent = userName;
+
+            // Khởi tạo sự kiện Form
+            setupEventListeners();
+
+            // Mở đúng Tab trước đó người dùng đã ở lại (Tránh nhảy trang)
+            const activeTab = localStorage.getItem('currentAdminTab') || 'products';
+            showSection(activeTab);
+        });
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // HÀM ĐIỀU HƯỚNG TAB CHÍNH (Đã cập nhật để tải Đơn hàng)
+        function showSection(sectionId) {
+            // Ẩn/hiện nội dung
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            const activeSec = document.getElementById(sectionId);
+            if (activeSec) {
+                activeSec.classList.add('active');
+                // Ghi nhớ Tab để khi Xóa/Thêm xong không bị nhảy về Tab đầu
+                localStorage.setItem('currentAdminTab', sectionId);
+            }
+
+            // Đồng bộ sidebar
+            const navLink = document.querySelector(`.nav-link[onclick*="${sectionId}"]`);
+            if (navLink) navLink.classList.add('active');
+
+            // Cập nhật Page Title
+            const titles = { 'products': 'Quản lý Sản phẩm', 'inventory': 'Quản lý Kho hàng', 'orders': 'Quản lý Đơn hàng' };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Admin Dashboard';
+
+            // Nếu vào tab Kho hàng -> Load dữ liệu mới nhất
+            if (sectionId === 'inventory' && typeof loadInventory === 'function') {
+                loadInventory();
+            }
+
+            // MỚI THÊM: Nếu vào tab Đơn hàng -> Load dữ liệu đơn hàng
+            if (sectionId === 'orders' && typeof loadOrders === 'function') {
+                loadOrders();
+            }
+        }
+
+        function setupEventListeners() {
+            // Preview hình ảnh khi chọn file
+            const imgInput = document.getElementById('productImage');
+            if (imgInput) {
+                imgInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = ex => {
+                            const preview = document.getElementById('productImagePreview');
+                            preview.src = ex.target.result;
+                            preview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Lắng nghe sự kiện Submit Form
+            const form = document.getElementById('productForm');
+            if (form) form.addEventListener('submit', handleProductSubmit);
+        }
+
+        async function handleProductSubmit(e) {
+            e.preventDefault();
+            
+            Swal.fire({
+                title: 'Đang xử lý',
+                text: 'Đang lưu sản phẩm...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            const formData = new FormData();
+            formData.append('Name', document.getElementById('productName').value);
+            formData.append('Category', document.getElementById('productGrade').value);
+            formData.append('Stock', document.getElementById('productStock').value);
+            formData.append('Price', document.getElementById('productPrice').value);
+            formData.append('Description', document.getElementById('productDesc').value || '');
+            
+            const file = document.getElementById('productImage').files[0];
+            if (file) formData.append('Image', file);
+            
+            const id = document.getElementById('editProductId').value;
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_BASE}/products/${id}` : `${API_BASE}/products`;
+            
+            try {
+                const token = getJwtToken();
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+                
+                if (res.ok) {
+                    Swal.fire({
+                        title: 'Thành công',
+                        text: 'Dữ liệu đã được cập nhật tại chỗ.',
+                        icon: 'success',
+                        confirmButtonText: 'Xác nhận',
+                        confirmButtonColor: '#1e40af'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            resetProductForm();
+                            
+                            // Ở lại Tab hiện tại và nạp dữ liệu mới
+                            const currentTab = localStorage.getItem('currentAdminTab') || 'products';
+                            showSection(currentTab);
+                        }
+                    });
+                    resetProductForm();
+                    
+                    // Ở lại Tab hiện tại và nạp dữ liệu mới
+                    const currentTab = localStorage.getItem('currentAdminTab') || 'products';
+                    showSection(currentTab);
+                } else {
+                    const errorMsg = await res.text();
+                    Swal.fire({
+                        title: 'Lỗi',
+                        text: errorMsg,
+                        icon: 'error',
+                        confirmButtonText: 'Xác nhận',
+                        confirmButtonColor: '#1e40af'
+                    });
+                }
+            } catch (error) {
+                Swal.fire('Thất bại', 'Không kết nối được API Backend (Port 5134)!', 'error');
+            }
+        }
+
+        function resetProductForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('editProductId').value = '';
+            document.getElementById('productImagePreview').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

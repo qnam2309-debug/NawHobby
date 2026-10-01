@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .notification.show { transform: translateX(0); }
+        .notification.success { background-color: #28a745; }
+        .notification.error { background-color: var(--gundam-red); }
+        .notification i { font-size: 20px; }
+        
+        /* Auth container tweaks */
+        .auth-container { border-top-color: var(--gundam-yellow); }
+        .register-link { text-align: center; margin-top: 15px; }
+        .register-link a { color: var(--gundam-blue); text-decoration: none; font-weight: 500; }
+        .register-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+
+<div id="header-container"></div>
+
+
+
+    <div class="auth-container">
+        <h2 style="text-align: center; margin-bottom: 20px; color: var(--gundam-blue);"><i class="fas fa-user-plus"></i> Tạo tài khoản mới</h2>
+        
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label>Họ tên</label>
+                <input type="text" name="fullName" class="form-control" required placeholder="Nguyễn Văn A">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" name="password" class="form-control" required minlength="6">
+            </div>
+            <button type="submit" class="btn-buy" style="background-color: var(--gundam-blue); width: 100%;"><i class="fas fa-user-plus"></i> Đăng Ký</button>
+        </form>
+        
+        <div class="register-link">
+            <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {
+                fullName: formData.get('fullName'),
+                email: formData.get('email'),
+                password: formData.get('password')
+            };
+            
+            try {
+                const response = await fetch('http://localhost:5134/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showNotification('success', 'Đăng ký thành công! Bạn có thể đăng nhập ngay.');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    const error = await response.json();
+                    showNotification('error', error.message || 'Đăng ký thất bại!');
+                }
+            } catch (err) {
+                showNotification('error', 'Lỗi kết nối. Vui lòng thử lại!');
+            }
+        }
+        
+        function showNotification(type, message) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            
+            notification.className = `notification ${type}`;
+            notificationMessage.textContent = message;
+            notification.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 4000);
+        }
+    </script>
+</body>
+</html>

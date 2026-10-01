@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; padding: 20px 0; }
+        .pagination-btn { padding: 10px 15px; border: 2px solid var(--gundam-blue); background: transparent; color: var(--gundam-blue); border-radius: 5px; cursor: pointer; font-weight: 600; }
+        .pagination-btn:hover:not(:disabled) { background: var(--gundam-blue); color: white; }
+        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-info { color: var(--text-color); font-weight: 600; margin: 0 15px; }
+        #searchInfo, #gradeFilterInfo { margin-bottom: 20px; padding: 15px; background: var(--gundam-blue); color: white; border-radius: 8px; display: none; }
+        
+        /* Chatbot Styling */
+        #chat-messages { display: flex; flex-direction: column; gap: 10px; padding: 15px; height: 350px; overflow-y: auto; background: #fdfdfd; }
+        .bot-msg-item { align-self: flex-start; background: #eee; padding: 10px 14px; border-radius: 12px 12px 12px 0; font-size: 14px; max-width: 85%; color: #333; line-height: 1.5; }
+        .user-msg-item { align-self: flex-end; background: var(--gundam-blue); color: white; padding: 10px 14px; border-radius: 12px 12px 0 12px; font-size: 14px; max-width: 85%; line-height: 1.5; }
+        #chat-messages::-webkit-scrollbar { width: 5px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+
+<div id="header-container"></div>
+
+
+    <section class="container products-section">
+        <h2 class="section-title">Danh sách sản phẩm</h2>
+        <div id="searchInfo"><span id="searchResultText"></span><button onclick="clearSearch()">Xóa tìm kiếm</button></div>
+        <div id="gradeFilterInfo"><span id="gradeFilterText"></span><button id="gradeFilterClear" onclick="clearGradeFilter()">Xóa lọc</button></div>
+        <div class="product-grid" id="productGrid"></div>
+        <div class="pagination" id="pagination" style="display: none;">
+            <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></button>
+            <span class="page-info" id="pageInfo"></span>
+            <button class="pagination-btn" id="nextBtn" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <div id="naw-chatbot-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+        <button id="chat-btn" onclick="toggleNawChat()" style="background: var(--gundam-blue); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 24px;"><i class="fas fa-robot"></i></button>
+        <div id="chat-box" style="display: none; position: absolute; bottom: 80px; right: 0; width: 350px; height: 480px; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden; border: 1px solid #eee;">
+            <div style="background: var(--gundam-blue); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <b>NawBot AI Tư Vấn</b>
+                <button onclick="toggleNawChat()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer; line-height:1;">&times;</button>
+            </div>
+            <div id="chat-messages">
+                <div class="bot-msg-item">Chào Builder! Mình là NawBot 🤖. Bạn cần tư vấn về mô hình nào hôm nay?</div>
+            </div>
+            <div style="padding: 10px; border-top: 1px solid #eee; display: flex; gap: 8px; background: white;">
+                <input type="text" id="chat-input" placeholder="Hỏi NawBot tại đây..." style="flex:1; padding: 10px; border-radius: 20px; border: 1px solid #ddd; outline:none; font-size: 14px;">
+                <button onclick="sendToGemini()" style="background: var(--gundam-red); color:white; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <div id="header-container"></div> <div id="footer-container"></div> <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // CẤU HÌNH API GEMINI 2.5 FLASH
+        const MY_API_KEY = 'AIzaSyDAejr99p0gmvfeUOEPNc5-FGUwJjEFevU'; 
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${MY_API_KEY}`;
+
+        function toggleNawChat() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.style.display = (chatBox.style.display === 'none' || chatBox.style.display === '') ? 'flex' : 'none';
+        }
+
+        async function sendToGemini() {
+            const input = document.getElementById('chat-input');
+            const msgContainer = document.getElementById('chat-messages');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            // Hiển thị tin nhắn người dùng
+            msgContainer.innerHTML += `<div class="user-msg-item">${userText}</div>`;
+            input.value = '';
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            const loadingId = 'loading-' + Date.now();
+            msgContainer.innerHTML += `<div id="${loadingId}" class="bot-msg-item"><i>NawBot đang phản hồi...</i></div>`;
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            // Lấy context từ sản phẩm thật của shop
+            const shopContext = allProducts.length > 0 
+                ? allProducts.slice(0, 15).map(p => `${p.name} (${p.grade}) giá ${formatPrice(p.price)}`).join(', ')
+                : "Hiện chưa có dữ liệu sản phẩm.";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: `Bạn là NawBot, nhân viên shop Gunpla NawHobby. Hãy tư vấn nhiệt tình, ngắn gọn. Đây là danh sách sản phẩm shop đang có: ${shopContext}. Trả lời câu hỏi của khách: ${userText}` }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) throw new Error("API Error");
+
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    let botReply = data.candidates[0].content.parts[0].text;
+                    // Format chữ in đậm
+                    botReply = botReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                    msgContainer.innerHTML += `<div class="bot-msg-item">${botReply}</div>`;
+                }
+            } catch (e) {
+                const errEl = document.getElementById(loadingId);
+                if(errEl) errEl.innerHTML = "<span style='color:red'>Lỗi tín hiệu Minovsky! Builder hãy thử lại nhé.</span>";
+            }
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        // PAGINATION & RENDER LOGIC
+        const productsPerPage = 8;
+        let currentPage = 1;
+        let allProducts = [];
+
+        function renderProductsPage(productsList = allProducts) {
+            const productGrid = document.getElementById('productGrid');
+            if (!productGrid) return;
+            
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const pageProducts = productsList.slice(startIndex, startIndex + productsPerPage);
+            
+            productGrid.innerHTML = pageProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" class="product-img" onerror="this.src='assets/images/no-image.jpg'">
+                    <span class="product-grade">${product.grade}</span>
+                    <h3 class="product-name">${product.name}</h3>
+                    <span class="product-price">${typeof formatPrice === 'function' ? formatPrice(product.price) : product.price}</span>
+                    <button class="btn-buy" onclick="addToCart(${product.id})">Mua ngay</button>
+                </div>
+            `).join('');
+
+            const pagination = document.getElementById('pagination');
+            if (pagination) {
+                pagination.style.display = productsList.length > productsPerPage ? 'flex' : 'none';
+                document.getElementById('pageInfo').textContent = `Trang ${currentPage} / ${Math.ceil(productsList.length / productsPerPage)}`;
+                document.getElementById('prevBtn').disabled = (currentPage === 1);
+                document.getElementById('nextBtn').disabled = (currentPage === Math.ceil(productsList.length / productsPerPage));
+            }
+        }
+
+        function changePage(dir) {
+            currentPage += dir;
+            renderProductsPage();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.renderProducts = function(list) {
+            allProducts = list;
+            renderProductsPage();
+        };
+
+        // Gắn sự kiện Enter cho input chat
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { 
+            if(e.key === 'Enter') sendToGemini(); 
+        });
+    </script>
+
+</body>
+</html>

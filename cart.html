@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .cart-page {
+            padding: 60px 0;
+            min-height: 60vh;
+        }
+        
+        .cart-title {
+            font-size: 28px;
+            color: var(--gundam-blue);
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--gundam-red);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .cart-container:has(.cart-items) {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+        
+        .cart-container {
+            min-height: 400px;
+        }
+        
+        .cart-items {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            overflow: hidden;
+        }
+        
+        .cart-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 100px;
+            gap: 15px;
+            padding: 15px 20px;
+            background: var(--gundam-blue);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 100px;
+            gap: 15px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #f5f5f5;
+        }
+        
+        .item-info h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .item-info .item-price {
+            color: var(--gundam-red);
+            font-weight: bold;
+        }
+        
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .qty-btn:hover {
+            background: var(--gundam-blue);
+            color: white;
+            border-color: var(--gundam-blue);
+        }
+        
+        .qty-value {
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .item-total {
+            font-weight: bold;
+            color: var(--gundam-red);
+            font-size: 16px;
+        }
+        
+        .remove-btn {
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-size: 18px;
+        }
+        
+        .remove-btn:hover {
+            color: var(--gundam-red);
+        }
+        
+        .cart-summary {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .summary-title {
+            font-size: 20px;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        
+        .summary-row.total {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--gundam-red);
+            border-top: 2px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .coupon-form {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .coupon-form input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        
+        .coupon-form button {
+            padding: 10px 20px;
+            background: var(--gundam-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--gundam-red);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background: #b30000;
+        }
+        
+        .continue-shopping {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--gundam-blue);
+            text-decoration: none;
+        }
+        
+        .continue-shopping:hover {
+            text-decoration: underline;
+        }
+        
+        .empty-cart {
+            width: 100%;
+            text-align: center;
+            padding: 80px 20px;
+            margin: 0 auto;
+        }
+        
+        .empty-cart i {
+            font-size: 80px;
+            color: #ccc;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .empty-cart h3 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gundam-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background-color: #28a745;
+        }
+        
+        .notification.error {
+            background-color: var(--gundam-red);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-header {
+                display: none;
+            }
+            
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                grid-template-rows: auto auto;
+                gap: 10px;
+            }
+            
+            .item-quantity, .item-total, .remove-btn {
+                grid-column: 2;
+            }
+            
+            .cart-header span:nth-child(3),
+            .cart-header span:nth-child(4),
+            .cart-header span:nth-child(5) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="header-container"></div>
+
+
+    <section class="cart-page">
+        <div class="container">
+            <h1 class="cart-title"><i class="fas fa-shopping-cart"></i> Giỏ hàng của bạn</h1>
+            
+            <div class="cart-container" id="cartContainer">
+                <!-- Cart items will be rendered here -->
+            </div>
+        </div>
+    </section>
+
+
+<div id="footer-container"></div>
+
+    <!-- Notification -->
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Cart data
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Sample products for demo
+        const sampleProducts = [
+            {
+                id: 1,
+                name: 'RG 1/144 RX-78-2 Gundam',
+                price: 850000,
+                image: 'https://i.pinimg.com/1200x/ee/5c/b1/ee5cb1022c1f28700f853c0217f67312.jpg'
+            },
+            {
+                id: 2,
+                name: 'MG 1/100 RX-93 v Gundam Ver.Ka',
+                price: 1800000,
+                image: 'https://i.pinimg.com/1200x/f5/e4/56/f5e45631c48e94410a58d649b2f583da.jpg'
+            },
+            {
+                id: 3,
+                name: 'MG 1/100 Sazabi Ver.Ka',
+                price: 2100000,
+                image: 'https://m.media-amazon.com/images/I/7139riAj7+L._AC_SL1396_.jpg'
+            },
+            {
+                id: 4,
+                name: 'PG 1/60 RX-0 Unicorn Gundam',
+                price: 4200000,
+                image: 'https://i.pinimg.com/1200x/ee/fa/78/eefa78bbb0ea815ccecc9e8c7995d624.jpg'
+            }
+        ];
+        
+        // Cart luôn rỗng khi chưa thêm sản phẩm (yêu cầu user)
+        // Giờ cart sẽ rỗng thực sự từ localStorage
+        
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+        
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+        
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        }
+        
+        function renderCart() {
+            const container = document.getElementById('cartContainer');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Giỏ hàng trống</h3>
+                        <p>Bạn chưa có sản phẩm nào trong giỏ hàng</p>
+                        <a href="index.html">Tiếp tục mua sắm</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            let itemsHTML = `
+                <div class="cart-items">
+                    <div class="cart-header">
+                        <span>Ảnh</span>
+                        <span>Sản phẩm</span>
+                        <span>Đơn giá</span>
+                        <span>Số lượng</span>
+                        <span>Thành tiền</span>
+                    </div>
+            `;
+            
+            cart.forEach((item, index) => {
+                const total = item.price * item.quantity;
+                itemsHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="item-info">
+                            <h4>${item.name}</h4>
+                            <span class="item-price">${formatPrice(item.price)}</span>
+                        </div>
+                        <div class="item-quantity">
+                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                            <span class="qty-value">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                        </div>
+                        <div class="item-total">${formatPrice(total)}</div>
+                        <div class="remove-btn" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            itemsHTML += '</div>';
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal >= 500000 ? 0 : 30000;
+            const total = subtotal + shipping;
+            
+            const summaryHTML = `
+                <div class="cart-summary">
+                    <h3 class="summary-title">Tổng quan đơn hàng</h3>
+                    
+                    <div class="coupon-form">
+                        <input type="text" placeholder="Mã giảm giá">
+                        <button onclick="applyCoupon()">Áp dụng</button>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Tạm tính:</span>
+                        <span>${formatPrice(subtotal)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Phí vận chuyển:</span>
+                        <span>${shipping === 0 ? 'Miễn phí' : formatPrice(shipping)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Giảm giá:</span>
+                        <span>0 ₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Địa chỉ giao hàng:</span>
+                    </div>
+
+                    <div class="summary-row total">
+                        <span>Tổng cộng:</span>
+                        <span>${formatPrice(total)}</span>
+                    </div>
+                    
+                    <button class="checkout-btn" onclick="checkout()">
+
+                        <i class="fas fa-credit-card"></i> Tiến hành thanh toán
+                    </button>
+                    
+                    <a href="index.html" class="continue-shopping">
+                        <i class="fas fa-arrow-left"></i> Tiếp tục mua sắm
+                    </a>
+                </div>
+            `;
+            
+            container.innerHTML = itemsHTML + summaryHTML;
+        }
+        
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity < 1) {
+                cart[index].quantity = 1;
+            }
+            saveCart();
+            renderCart();
+        }
+        
+        function removeItem(index) {
+            if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+                cart.splice(index, 1);
+                saveCart();
+                renderCart();
+                showNotification('success', 'Đã xóa sản phẩm khỏi giỏ hàng');
+            }
+        }
+        
+        function applyCoupon() {
+            showNotification('success', 'Mã giảm giá đã được áp dụng!');
+        }
+        
+function checkout() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) {
+                showNotification('error', 'Giỏ hàng trống');
+                return;
+            }
+            
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                showNotification('error', 'Bạn cần đăng nhập để thanh toán');
+                localStorage.setItem('redirectAfterLogin', window.location.href);
+                setTimeout(() => window.location.href = 'login.html', 1500);
+                return;
+            }
+            
+            window.location.href = 'checkout.html';
+        }
+
+        
+        function showNotification(type, message) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            
+            notification.className = 'notification ' + type;
+            notificationMessage.textContent = message;
+            
+            notification.classList.add('show');
+            
+            setTimeout(function() {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Render cart on page load
+        renderCart();
+        updateCartCount();
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử hình thành Gunpla - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .news-page { padding: 40px 0; min-height: 70vh; }
+        .news-header { text-align: center; margin-bottom: 40px; }
+        .news-header h1 { color: var(--gundam-blue); font-size: 36px; margin-bottom: 15px; }
+        .news-meta { color: #666; font-size: 14px; }
+        .news-meta i { margin-right: 5px; color: var(--gundam-blue); }
+        .news-content { background: var(--card-bg); padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px var(--shadow-color); }
+        .news-content h2 { color: var(--gundam-red); margin: 30px 0 15px; font-size: 24px; }
+        .news-content p { line-height: 1.8; margin-bottom: 15px; color: var(--text-color); }
+        .timeline { position: relative; padding-left: 30px; margin: 30px 0; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--gundam-blue); border-radius: 2px; }
+        .timeline-item { position: relative; margin-bottom: 30px; }
+        .timeline-item::before { content: ''; position: absolute; left: -36px; top: 5px; width: 16px; height: 16px; background: var(--gundam-yellow); border-radius: 50%; border: 3px solid var(--gundam-blue); }
+        .timeline-year { font-weight: bold; color: var(--gundam-blue); font-size: 18px; margin-bottom: 8px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--gundam-blue); text-decoration: none; }
+        .back-btn:hover { text-decoration: underline; }
+        .featured-image { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="header-container"></div>
+
+    <section class="news-page">
+        <div class="container">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</a>
+            
+            <div class="news-header">
+                <h1>Lịch sử hình thành Gunpla</h1>
+                <div class="news-meta">
+                    <span><i class="fas fa-calendar"></i> 15/01/2024</span>
+                    <span style="margin-left: 20px;"><i class="fas fa-user"></i> NawHobby</span>
+                </div>
+            </div>
+            
+            <div class="news-content">
+                <img src="https://i.pinimg.com/1200x/b2/5d/a2/b25da279ea367fcc2a7047d4325c5649.jpg" alt="Gunpla History" class="featured-image">
+                
+                <p>Gunpla (ガンプラ, Guranpura) là thuật ngữ chỉ các mô hình Gundam plastic - sản phẩm mô hình nhựa của dòng robot Gundam nổi tiếng từ Nhật Bản.</p>
+                
+                <h2>Khởi nguồn (1980)</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">Năm 1980 - Ra mắt bộ đầu tiên</div>
+                        <p>Bandai lần đầu tiên giới thiệu mô hình Gundam plastic đầu tiên mang tên "1/144 RX-78-2 Gundam". Đây là khởi đầu cho một đế chế mô hình kéo dài hơn 40 năm.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">Năm 1995 - Series MG ra đời</div>
+                        <p>Bandai giới thiệu dòng Master Grade (MG) với tỷ lệ 1/100, mang đến mức độ chi tiết cao hơn và cơ động tốt hơn.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">Năm 2010 - Series RG</div>
+                        <p>Real Grade (RG) ra mắt với tỷ lệ 1/144, mang đến công nghệ khung xương đúc sẵn với chi tiết cực kỳ tinh xảo.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-year">Năm 2020 - PGU và Era mới</div>
+                        <p>Bandai giới thiệu Perfect Grade Unleashed (PGU) RX-78-2, đánh dấu bước tiến công nghệ đỉnh cao trong ngành mô hình.</p>
+                    </div>
+                </div>
+                
+                <h2>Các dòng sản phẩm chính</h2>
+                <p><strong>HG (High Grade)</strong> - Tỷ lệ 1/144. Phổ biến, giá tốt.</p>
+                <p><strong>RG (Real Grade)</strong> - Tỷ lệ 1/144. Chi tiết như MG nhưng kích thước nhỏ.</p>
+                <p><strong>MG (Master Grade)</strong> - Tỷ lệ 1/100. Độ chi tiết và cơ động cao.</p>
+                <p><strong>PG (Perfect Grade)</strong> - Tỷ lệ 1/60. Dòng cao cấp nhất.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="assets/js/main.js"></script>
+    
+</body>
+</html>

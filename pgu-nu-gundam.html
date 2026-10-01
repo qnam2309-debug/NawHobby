@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGU Nu Gundam - Sản phẩm mới ra mắt - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .news-page {
+            padding: 40px 0;
+            min-height: 70vh;
+        }
+        
+        .news-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .news-header h1 {
+            color: var(--gundam-blue);
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+        
+        .news-meta {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .news-meta i {
+            margin-right: 5px;
+            color: var(--gundam-blue);
+        }
+        
+        .news-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+        
+        .news-content h2 {
+            color: var(--gundam-red);
+            margin: 30px 0 15px;
+            font-size: 24px;
+        }
+        
+        .news-content p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .product-highlight {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .product-highlight h3 {
+            color: var(--gundam-yellow);
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-size: 32px;
+            color: var(--gundam-red);
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .specs-table th, .specs-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .specs-table th {
+            background: var(--gundam-blue);
+            color: white;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--gundam-blue);
+            text-decoration: none;
+        }
+        
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .featured-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: var(--gundam-red);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="top-bar">
+            <div class="container top-bar-content">
+                <span class="top-text"><i class="fas fa-truck"></i> Miễn phí vận chuyển toàn quốc đơn từ 500k</span>
+                <div class="top-links">
+                    <a href="#"><i class="fas fa-phone-alt"></i> Hotline: 1900 xxxx</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-header">
+            <div class="container main-header-content">
+                <a href="index.html" class="logo">NAWHOBBY</a>
+
+                <div class="header-actions">
+                    <a href="login.html" class="action-item">
+                        <i class="far fa-user"></i>
+                        <span>Đăng nhập</span>
+                    </a>
+                    <a href="cart.html" class="action-item cart-action">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cartCount">0</span> 
+                    </a>
+                    <!-- Dark mode button removed -->
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <div class="container">
+                <ul class="nav-list">
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li><a href="#">Mô hình Gundam</a></li>
+                    <li><a href="#">Dụng cụ - Sơn</a></li>
+
+                    <li><a href="history.html" class="active">Tin tức Gunpla</a></li>
+                    <li id="adminNav" style="display: none;">
+                        <a href="admin-dashboard.html">
+                            <i class="fas fa-cog" style="margin-right: 5px;"></i>Quản lý Admin
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    </header>
+
+    <section class="news-page">
+        <div class="container">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</a>
+            
+            <div class="news-header">
+                <span class="tag">SẢN PHẨM MỚI</span>
+                <h1>PGU RX-93 ν (Nu) Gundam - Huyền thoại trở lại</h1>
+                <div class="news-meta">
+                    <span><i class="fas fa-calendar"></i> 20/01/2024</span>
+                    <span style="margin-left: 20px;"><i class="fas fa-user"></i> NawHobby</span>
+                </div>
+            </div>
+            
+            <div class="news-content">
+                <img src="https://i.pinimg.com/1200x/f5/e4/56/f5e45631c48e94410a58d649b2f583da.jpg" alt="PGU Nu Gundam" class="featured-image">
+                
+                <p>Bandai chính thức ra mắt <strong>PGU RX-93 ν (Nu) Gundam</strong> - phiên bản Perfect Grade Unreal mới nhất trong series Gundam "Char's Counterattack". Đây là một trong những mô hình được mong đợi nhất của năm 2024.</p>
+                
+                <div class="product-highlight">
+                    <h3><i class="fas fa-star"></i> PGU Nu Gundam</h3>
+                    <p>Phiên bản giới hạn - Đẳng cấp Perfect Grade Unreal</p>
+                    <div class="product-price">5.800.000 ₫</div>
+                    <button class="btn-buy" style="max-width: 300px; margin: 0 auto;"><i class="fas fa-shopping-cart"></i> Đặt hàng ngay</button>
+                </div>
+                
+                <h2>Điểm nổi bật</h2>
+                
+                <p><strong>1. Công nghệ LED tích hợp</strong><br>
+                PGU Nu Gundam là mô hình PGU đầu tiên được trang bị hệ thống LED tích hợp, cho phép chiếu sáng các bộ phận như mắt, vệt phản quang và Psycho Frame.</p>
+                
+                <p><strong>2. Khung xương cao cấp</strong><br>
+                Sử dụng khung xương "Real Grade" với hơn 90 điểm khớp, mang đến khả năng di chuyển và pose cực kỳ mượt mà.</p>
+                
+                <p><strong>3. Chi tiết sơn cao cấp</strong><br>
+                Các chi tiết nhỏ như vent,line và symbol đã được sơn sẵn với độ chính xác cao, giảm thiểu công sơn cho người lắp ráp.</p>
+                
+                <p><strong>4. Bộ phụ kiện đầy đủ</strong><br>
+                Bao gồm đầy đủ vũ khí: Beam Rifle, Beam Saber (x2), Shield, Funnel (x6) và stand trưng bày.</p>
+                
+                <h2>Thông số kỹ thuật</h2>
+                
+                <table class="specs-table">
+                    <tr>
+                        <th>Thông số</th>
+                        <th>Chi tiết</th>
+                    </tr>
+                    <tr>
+                        <td>Tỷ lệ</td>
+                        <td>1/60</td>
+                    </tr>
+                    <tr>
+                        <td>Chiều cao</td>
+                        <td>khoảng 30cm</td>
+                    </tr>
+                    <tr>
+                        <td>Số chi tiết</td>
+                        <td>Hơn 600 chi tiết</td>
+                    </tr>
+                    <tr>
+                        <td>Khớp động</td>
+                        <td>Hơn 90 điểm</td>
+                    </tr>
+                    <tr>
+                        <td>LED tích hợp</td>
+                        <td>Có (mắt, Psycho Frame)</td>
+                    </tr>
+                    <tr>
+                        <td>Độ khó lắp ráp</td>
+                        <td>Trung bình - Khó</td>
+                    </tr>
+                </table>
+                
+                <h2>Lịch sử Nu Gundam</h2>
+                
+                <p>RX-93 ν Gundam (Nu Gundam) là Mobile Suit chính của Amuro Ray trong bộ phim anime "Mobile Suit Gundam: Char's Counterattack" (1988). Đây là một trong những MS được trang bị vũ khí mạnh nhất thời điểm đó, đặc biệt là hệ thống Psycho Frame giúp người lái có thể điều khiển bằng suy nghĩ.</p>
+                
+                <h2>Đặt hàng ngay</h2>
+                
+                <p>PGU Nu Gundam hiện có sẵn tại NawHobby với giá <strong>5.800.000 ₫</strong>. Quý khách hàng quan tâm vui lòng liên hệ hoặc đặt hàng trực tiếp tại cửa hàng.</p>
+                
+                <p style="color: #666; font-size: 14px; margin-top: 30px;"><em>Lưu ý: Hình ảnh sản phẩm có thể khác với thực tế một chút. Sản phẩm chính hãng Bandai Nhật Bản.</em></p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Liên hệ</h3>
+                <ul class="footer-contact">
+                    <li><i class="fas fa-phone-alt"></i> <span>Điện thoại: 0902666999</span></li>
+                    <li><i class="fas fa-envelope"></i> <span>Email: contact@nawhobby.com</span></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Kết nối</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 NAWHOBBY - Gundam Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartBadge = document.getElementById('cartCount');
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NawHobby - Gundam Store - Mô hình chính hãng</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Banner Chuẩn 1500x620 Bo Góc --- */
+        .naw-banner-section {
+            background-color: #ffffff; /* Nền trắng sạch sẽ */
+            padding: 30px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .naw-banner-box {
+            position: relative;
+            width: 100%;
+            max-width: 1500px;
+            height: 620px;
+            margin: 0 auto;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .naw-banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .naw-banner-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.35); /* Làm tối nhẹ để nổi bật chữ */
+            display: flex;
+            align-items: center;
+            padding-left: 80px;
+        }
+
+        .naw-banner-content { color: #ffffff; }
+        .naw-title { font-size: 3.5rem; font-weight: 900; margin: 0; letter-spacing: 1px; }
+        .naw-subtitle { font-size: 1.5rem; margin: 10px 0 30px 0; font-weight: 500; }
+        
+        .naw-btn-buy {
+            display: inline-block;
+            padding: 15px 45px;
+            background-color: var(--gundam-red, #dc2626);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+        .naw-btn-buy:hover { background: white; color: var(--gundam-red, #dc2626); border-color: var(--gundam-red, #dc2626); transform: scale(1.05); }
+
+        /* --- Layout 4 Sản Phẩm Nổi Bật --- */
+        .products-section {
+            max-width: 1500px; /* Cân bằng với Banner */
+            margin: 40px auto;
+            padding: 0; /* No padding để grid thẳng hàng banner */
+        }
+
+        #productGrid {
+            width: 100%;
+            padding: 0 15px; /* Padding nội bộ cho đều */
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            border-left: 5px solid var(--gundam-red, #dc2626);
+            padding-left: 15px;
+        }
+
+#productGrid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            max-width: 1500px !important;
+            margin: 0 auto !important;
+            gap: 25px;
+        }
+
+        #productGrid.product-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            max-width: 1500px !important;
+            margin: 0 auto !important;
+            gap: 25px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .product-card {
+            position: relative;
+            background: #fff;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .product-grade {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: var(--gundam-red, #dc2626);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .view-all-section { text-align: center; margin-top: 40px; }
+        .view-all-btn {
+            display: inline-block;
+            padding: 12px 40px;
+            background: var(--gundam-blue, #0057b8);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            #productGrid.product-grid { 
+                grid-template-columns: repeat(2, 1fr) !important; /* Responsive 2 cột */
+            }
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .naw-banner-box { height: 400px; }
+            .naw-banner-overlay { padding-left: 40px; }
+            .naw-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header-container"></div>
+
+    <section class="naw-banner-section">
+        <div class="container">
+            <div class="naw-banner-box">
+                <img src="https://i.pinimg.com/1200x/05/06/56/050656ad9c337897f214f9e1d1d066ba.jpg" alt="NawHobby Banner" class="naw-banner-img">
+                
+                <div class="naw-banner-overlay">
+                    <div class="naw-banner-content">
+                        <h1 class="naw-title">NAWHOBBY - THẾ GIỚI GUNPLA</h1>
+                        <p class="naw-subtitle">MÔ HÌNH CHÍNH HÃNG. ĐAM MÊ BẤT TẬN.</p>
+                        <a href="#productGrid" class="naw-btn-buy">MUA NGAY</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <h2 class="section-title">Sản phẩm nổi bật</h2>
+        
+        <div id="searchInfo" style="display: none; margin-bottom: 20px; padding: 15px; background: #0057b8; color: white; border-radius: 8px;">
+            <span id="searchResultText"></span>
+            <button onclick="clearSearch()" style="float: right; background: transparent; border: 1px solid white; color: white; padding: 5px 15px; border-radius: 4px; cursor: pointer;">Xóa tìm kiếm</button>
+        </div>
+        
+        <div id="gradeFilterInfo" style="display: none;">
+            <span id="gradeFilterText"></span>
+            <button id="gradeFilterClear">Xóa lọc</button>
+        </div>
+        
+        <div class="product-grid" id="productGrid">
+            </div>
+        
+        <div class="view-all-section">
+            <a href="products.html" class="view-all-btn">
+                <i class="fas fa-eye"></i> Xem tất cả sản phẩm
+            </a>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            window.isHomepage = true;
+            window.isProductsPage = false; 
+            
+            try {
+                // Hiển thị loading từ main.js
+                if (typeof showLoading === 'function') showLoading(); 
+
+                const response = await fetch(`${API_BASE}/products/featured?limit=4`);
+                if (!response.ok) throw new Error('Không thể kết nối API');
+                
+                const apiProducts = await response.json();
+                
+                // CHỐT CHẶN: Chỉ lấy đúng 4 sản phẩm đầu tiên để cân bằng Layout
+                const featured = apiProducts.slice(0, 4).map(mapApiProduct); 
+                
+                window.currentProducts = featured; 
+                
+                if (typeof window.renderProducts === 'function') {
+                    window.renderProducts(featured);
+                }
+            } catch (error) {
+                console.error('Featured load error:', error);
+                // Bạn có thể render fallbackProducts ở đây nếu API lỗi
+            } finally {
+                // Cập nhật Cart Badge khi trang chủ load
+                if (typeof updateCartBadge === 'function') updateCartBadge();
+            }
+        });
+
+        function clearSearch() {
+            const searchInput = document.querySelector('.search-box input');
+            if (searchInput) searchInput.value = '';
+            location.reload(); 
+        }
+    </script>
+</body>
+</html>

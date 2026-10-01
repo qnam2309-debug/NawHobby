@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title><!-- Empty for partial -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <span class="top-text"><i class="fas fa-truck"></i> Miễn phí vận chuyển toàn quốc đơn từ 500k</span>
+            <div class="top-links">
+                <a href="#"><i class="fas fa-phone-alt"></i> Hotline: 1900 xxxx</a>
+                <a href="#"><i class="fas fa-map-marker-alt"></i> Hệ thống cửa hàng</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-header">
+        <div class="container main-header-content">
+            <a href="index.html" class="logo">NAWHOBBY</a>
+
+            <div class="search-box">
+                <input type="text" placeholder="Tìm kiếm mô hình..." id="searchInput">
+                <button class="btn-search" onclick="searchProductsAPIHandler('')"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="header-actions">
+                <div class="user-dropdown-container">
+                    <a href="login.html" class="action-item user-link">
+                        <i class="far fa-user"></i>
+                        <span>Đăng nhập</span>
+                    </a>
+                    <ul class="dropdown-menu user-dropdown">
+                        <li><a href="order-history.html"><i class="fas fa-history"></i> Lịch sử mua hàng</a></li>
+                        <li><a id="openUserInfo"><i class="fas fa-user"></i> Thông tin người dùng</a></li>
+                        <li><a id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                    </ul>
+                </div>
+                <a href="cart.html" class="action-item cart-action" title="Giỏ hàng">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartCount">0</span> 
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="index.html">Trang chủ</a></li>
+                <li class="has-dropdown">
+                    <a href="products.html">Mô hình Gundam <i class="fas fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="grade-filter-link" data-grade="HG">HG</a></li>
+                        <li><a href="#" class="grade-filter-link" data-grade="RG">RG</a></li>
+                        <li><a href="#" class="grade-filter-link" data-grade="MG">MG</a></li>
+                        <li><a href="#" class="grade-filter-link" data-grade="PG">PG</a></li>
+                        <li><a href="#" class="grade-filter-link" data-grade="MB">METAL BUILD</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Dụng cụ - Sơn</a></li>
+                <li><a href="#">Phụ kiện - Base</a></li>
+                <li><a href="history.html">Tin tức Gunpla</a></li>
+                <li><a href="contact.html">Liên hệ</a></li>
+                <li id="adminNav" style="display: none;">
+                    <a href="admin-dashboard.html">
+                        <i class="fas fa-cog" style="margin-right: 5px;"></i>Quản lý Admin
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+</body>
+</html>
+

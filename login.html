@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - NawHobby</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        /* Giao diện Wrapper theo kiểu Pinterest */
+        .auth-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        .pinterest-modal {
+            background: white;
+            width: 100%;
+            max-width: 850px;
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+
+        /* Bên trái: Form đăng nhập */
+        .modal-left {
+            flex: 1.2;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #111;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-control-pill {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 16px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-control-pill:focus {
+            border-color: var(--gundam-blue);
+        }
+
+        .btn-login-red {
+            width: 100%;
+            padding: 14px;
+            background: #e60023; /* Màu đỏ Pinterest */
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .btn-login-red:hover { background: #ad081b; }
+
+        .divider {
+            margin: 25px 0;
+            font-size: 12px;
+            font-weight: 700;
+            color: #767676;
+        }
+
+        /* Bên phải: Quảng cáo tính năng */
+        .modal-right {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-left: 1px solid #eee;
+        }
+
+        .promo-icon {
+            font-size: 60px;
+            color: var(--gundam-blue);
+            margin-bottom: 20px;
+        }
+
+        .notification {
+            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
+            border-radius: 8px; color: white; font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px); transition: transform 0.4s ease;
+            z-index: 9999; display: flex; align-items: center; gap: 10px;
+        }
+        .notification.show { transform: translateX(0); }
+        .notification.success { background-color: #28a745; }
+        .notification.error { background-color: var(--gundam-red); }
+
+        @media (max-width: 768px) {
+            .modal-right { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header-container"></div>
+
+    <div class="auth-wrapper">
+        <div class="pinterest-modal">
+            <div class="modal-left">
+                <h1 class="modal-title">Chào mừng Builder đến với NawHobby</h1>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control-pill" required placeholder="example@email.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Mật khẩu</label>
+                        <input type="password" name="password" class="form-control-pill" required placeholder="Nhập mật khẩu">
+                    </div>
+                    
+                    <button type="submit" class="btn-login-red">ĐĂNG NHẬP</button>
+
+                    <div class="divider">HOẶC</div>
+
+                    <div id="g_id_onload"
+                         data-client_id="685582721972-d55cfqifhbnf7bupea0chm679g2jb2an.apps.googleusercontent.com"
+                         data-callback="handleGoogleLogin">
+                    </div>
+                    <div class="g_id_signin" data-type="standard" data-shape="pill" data-width="320"></div>
+                    
+                    <p style="margin-top: 30px; font-size: 14px;">
+                        Chưa có tài khoản? <a href="register.html" style="color: var(--gundam-blue); font-weight: 700; text-decoration: none;">Đăng ký ngay</a>
+                    </p>
+                </form>
+            </div>
+
+            <div class="modal-right">
+                <div class="promo-icon"><i class="fas fa-shipping-fast"></i></div>
+                <h2 style="margin-bottom: 15px;">Thanh toán cực nhanh</h2>
+                <p style="color: #555; line-height: 1.6;">
+                    Khi mua hàng thành công lần đầu, hệ thống sẽ tự động ghi nhớ <b>địa chỉ giao hàng</b> cho bạn. Builder sẽ không cần nhập lại thông tin ở những lần sau!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+
+        // 1. Token Exchange với Backend
+        async function handleGoogleLogin(response) {
+            try {
+                const idToken = response.credential;
+                
+                const backendResponse = await fetch('http://localhost:5134/api/auth/google-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idToken })
+                });
+                
+                if (backendResponse.ok) {
+                    const data = await backendResponse.json();
+                    
+                    // Lưu JWT backend (exact key checkout.js expects)
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userName', data.user.fullName);
+                    localStorage.setItem('userEmail', data.user.email);
+                    localStorage.setItem('userRole', data.user.role);
+
+                    showNotification('success', `Chào mừng ${data.user.fullName}!`);
+                    
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                    if (redirectUrl) {
+                        localStorage.removeItem('redirectAfterLogin');
+                        setTimeout(() => window.location.href = redirectUrl, 1500);
+                    } else {
+                        setTimeout(() => window.location.href = 'index.html', 1500);
+                    }
+                } else {
+                    showNotification('error', 'Backend validation failed');
+                }
+            } catch (err) {
+                showNotification('error', 'Network error. Backend not running?');
+                console.error('Google login error:', err);
+            }
+        }
+
+
+        // 2. Logic Đăng nhập API hiện tại của bạn
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = event.target.email.value;
+            const password = event.target.password.value;
+            
+            try {
+                const response = await fetch('http://localhost:5134/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const userName = data.user.fullName || email.split('@')[0];
+                    const userRole = data.user.role;
+                    
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userName', userName);
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('userRole', userRole);
+                    
+                    showNotification('success', `Đăng nhập thành công! Chào mừng ${userName}!`);
+                    
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                    if (redirectUrl) {
+                        localStorage.removeItem('redirectAfterLogin');
+                        setTimeout(() => window.location.href = redirectUrl, 1500);
+                    } else if (userRole === 'Admin') {
+                        setTimeout(() => window.location.href = 'admin-dashboard.html', 1500);
+                    } else {
+                        setTimeout(() => window.location.href = 'index.html', 1500);
+                    }
+                } else {
+                    const error = await response.json();
+                    showNotification('error', error.message || 'Sai thông tin đăng nhập!');
+                }
+            } catch (err) {
+                showNotification('error', 'Không thể kết nối Backend (Port 5134).');
+            }
+        }
+        
+        function showNotification(type, message) {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            notification.className = 'notification ' + type;
+            notificationMessage.textContent = message;
+            notification.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

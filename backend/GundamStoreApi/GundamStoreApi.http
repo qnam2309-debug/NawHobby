@@ -1,0 +1,6 @@
+@GundamStoreApi_HostAddress = http://localhost:5134
+
+GET {{GundamStoreApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
